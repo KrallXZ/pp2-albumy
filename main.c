@@ -2,6 +2,7 @@
 #include <stdbool.h>
 
 #include "login.h"
+#include "albums.h"
 
 int main()
 {
@@ -13,6 +14,8 @@ int main()
   } while (!isLogged);
 
   printf("Zalogowano na konto: %s\n", _username);
+
+  manageAlbums();
 
   return 0;
 }
