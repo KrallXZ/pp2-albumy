@@ -16,14 +16,16 @@ typedef struct album
 } albums;
 
 void getAlbum(albums **end, int *id);
-void showAlbums(albums *start);
+void showAlbums(albums *end);
 void manageAlbums();
+void saveToFile(albums *end);
+albums *readFromFile(int *nextId);
 
 void manageAlbums()
 {
   int choice;
   int nextId = 1;
-  albums *end = NULL;
+  albums *end = readFromFile(&nextId);
 
   do
   {
@@ -37,6 +39,7 @@ void manageAlbums()
     {
     case 1:
       getAlbum(&end, &nextId);
+      saveToFile(end);
       break;
     case 2:
       showAlbums(end);
@@ -112,4 +115,60 @@ void showAlbums(albums *end)
     printf("\tOdsłuchano: %s\n", album->listened ? "TAK" : "NIE");
     album = album->previous;
   } while (album != NULL);
+}
+
+void saveToFile(albums *end)
+{
+  FILE *userAlbums;
+
+  char path[100] = "./albums/";
+  strcat(path, _username);
+
+  if (userAlbums = fopen(path, "wb"))
+  {
+    albums *current = end;
+    do
+    {
+      fseek(userAlbums, 0, SEEK_END);
+      fwrite(current, sizeof(albums), 1, userAlbums);
+
+      printf("Zapisuję %s do pliku.\n", current->title);
+      current = current->previous;
+    } while (current != NULL);
+
+    fclose(userAlbums);
+  }
+}
+
+albums *readFromFile(int *nextId)
+{
+  FILE *userAlbums;
+
+  char path[100] = "./albums/";
+  strcat(path, _username);
+
+  if (userAlbums = fopen(path, "rb"))
+  {
+    fseek(userAlbums, 0, SEEK_END);
+    unsigned int numberOfElements = (ftell(userAlbums) / sizeof(albums));
+
+    albums *end;
+
+    for (int i = 0; i < numberOfElements; i++)
+    {
+      albums *temp = malloc(sizeof(albums));
+      fseek(userAlbums, sizeof(albums) * i, SEEK_SET);
+
+      fread(temp, sizeof(albums), 1, userAlbums);
+      temp->previous = (i == 0) ? NULL : end;
+
+      end = temp;
+    }
+
+    fclose(userAlbums);
+
+    *nextId = numberOfElements + 1;
+
+    return end;
+  }
 }
