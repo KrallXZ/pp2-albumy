@@ -22,6 +22,9 @@ void createDirectories()
 int main()
 {
   createDirectories();
+#ifdef _WIN32
+  system("chcp 65001");
+#endif
   bool isLogged;
 
   do
