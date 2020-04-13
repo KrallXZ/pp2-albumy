@@ -109,7 +109,7 @@ void showAlbums(albums *end)
     printf("Album nr %d:\n", album->id);
     printf("\tArtysta: %s\n", album->artist);
     printf("\tTytul: %s\n", album->title);
-    printf("\tRok wydania: %s\n", album->released);
+    printf("\tWydano: %s\n", album->released);
     printf("\tGatunek: %s\n", album->genre);
     printf("\tZakupiono: %s\n", album->bought ? "TAK" : "NIE");
     printf("\tOdsłuchano: %s\n", album->listened ? "TAK" : "NIE");
