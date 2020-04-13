@@ -9,7 +9,7 @@ typedef struct album
   char artist[128];
   char title[64];
   char genre[128];
-  int year;
+  char year[4];
   bool bought;
   bool listened;
   struct album *previous;
@@ -68,8 +68,8 @@ void getAlbum(albums **end, int *id)
   newAlbum->genre[strlen(newAlbum->genre) - 1] = '\0';
 
   printf("\tRok: ");
-  scanf("%d", &newAlbum->year);
-  getchar();
+  fgets(newAlbum->year, 4, stdin);
+  newAlbum->year[strlen(newAlbum->year) - 1] = '\0';
 
   char bought;
   do
@@ -109,7 +109,7 @@ void showAlbums(albums *end)
     printf("Album nr %d:\n", album->id);
     printf("\tArtysta: %s\n", album->artist);
     printf("\tTytul: %s\n", album->title);
-    printf("\tRok wydania: %d\n", album->year);
+    printf("\tRok wydania: %s\n", album->year);
     printf("\tGatunek: %s\n", album->genre);
     printf("\tZakupiono: %s\n", album->bought ? "TAK" : "NIE");
     printf("\tOdsłuchano: %s\n", album->listened ? "TAK" : "NIE");
