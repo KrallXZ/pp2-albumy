@@ -132,7 +132,7 @@ void saveToFile(albums *end)
       fseek(userAlbums, 0, SEEK_END);
       fwrite(current, sizeof(albums), 1, userAlbums);
 
-      printf("Zapisuję %s do pliku.\n", current->title);
+      //printf("Zapisuję %s do pliku.\n", current->title);
       current = current->previous;
     } while (current != NULL);
 
