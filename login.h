@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "utils.h"
+
 #define MAX_ATTEMPTS 3
 
 char _username[64];
@@ -35,7 +37,7 @@ bool getPassword(char username[])
 
   while (attempt <= 3)
   {
-    printf("[%d/%d] Podaj hasło: ", attempt, MAX_ATTEMPTS);
+    printf("[%d/%d] ❓ Podaj hasło: ", attempt, MAX_ATTEMPTS);
     scanf("%s", password);
 
     if (checkPassword(username, password))
@@ -90,7 +92,7 @@ bool checkIfAccountExists(char username[])
 bool login()
 {
   char username[64];
-  printf("Podaj login: ");
+  printf("❓ Podaj login: ");
   scanf("%s", username);
 
   if (checkIfAccountExists(username))
@@ -105,10 +107,18 @@ bool login()
   }
   else
   {
-    printf("Brak konta w bazie, trwa tworzenie...\n");
-    makeAccount(username);
-    strcpy(_username, username);
-    return true;
+    printf("❗ Brak konta w bazie!\n");
+    bool createNewAccount = getBooleanInput("Czy utworzyć nowe konto", true);
+
+    if (createNewAccount)
+    {
+      printf("Trwa tworzenie konta... 😉\n");
+      makeAccount(username);
+      strcpy(_username, username);
+      return true;
+    }
+
+    return false;
   }
 
   return false;
