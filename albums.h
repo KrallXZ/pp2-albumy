@@ -23,6 +23,7 @@ typedef struct album
   bool bought;
   bool listened;
   struct album *previous;
+  struct album *next;
 } albums;
 
 void getAlbum(albums **end, int *id);
@@ -32,12 +33,12 @@ void saveToFile(albums *end, char *username);
 albums *readFromFile(int *nextId, char *username);
 
 void find_album(albums *end, char title[]);
-void delete_album(albums **end, int id);
+void deleteAlbum(albums **end, int id, char *username);
 
 void manageAlbums(char *username)
 {
   printf("Ładowanie albumów...\n");
-  int choice, numer;
+  int choice, id;
   char artist[128], title[64];
   int nextId = 1;
   albums *end = readFromFile(&nextId, username);
@@ -61,8 +62,8 @@ void manageAlbums(char *username)
       break;
     case 3:
       printf("Podaj ID albumu ktory chcesz usunac: ");
-      scanf("%d", &numer);
-      delete_album(&end, numer);
+      scanf("%d", &id);
+      deleteAlbum(&end, id, username);
       saveToFile(end, username);
       break;
     case 4:
@@ -109,53 +110,44 @@ void getAlbum(albums **end, int *id)
   *id += 1;
 
   newAlbum->previous = (*end);
+  newAlbum->next = NULL;
+  if (*end != NULL)
+  {
+    (*end)->next = newAlbum;
+  }
   *end = newAlbum;
 }
 
-void delete_front(albums **end)
+void deleteAlbum(albums **end, int id, char *username)
 {
-  albums *prev = (*end)->previous;
-  free(*end);
-  *end = prev;
-}
-
-albums *find_prev_node(albums *end, int id)
-{
-  albums *prev = NULL;
-  while ((NULL != end) && (end->id != id))
+  if (*end == NULL)
   {
-    prev = end;
-    end = end->previous;
-  }
-  return prev;
-}
-
-void delete_after(albums *node)
-{
-  albums *prev = node->previous;
-  if (prev)
-  {
-    node->previous = prev->previous;
-    free(prev);
-  }
-}
-
-void delete_album(albums **end, int id)
-{
-  if (NULL == *end)
-  {
-    printf("Lista jest pusta");
+    printf("Brak albumów!\n");
     return;
   }
+
   if ((*end)->id == id)
   {
-    return delete_front(end);
+    albums *previous = (*end)->previous;
+    free(*end);
+    *end = previous;
+    return;
   }
-  else
+
+  albums *temp = (*end)->previous;
+  while (temp != NULL && temp->id != id)
   {
-    albums *prev = find_prev_node(*end, id);
-    delete_after(prev);
+    temp = temp->previous;
   }
+
+  if (temp != NULL)
+  {
+    temp->previous->next = temp->next;
+    free(temp);
+    return;
+  }
+
+  printf("Nie znaleziono albumu.\n");
 }
 
 void find_album(albums *end, char title[])
@@ -210,17 +202,24 @@ void saveToFile(albums *end, char *username)
   char path[100] = "./albums/";
   strcat(path, username);
 
+  if (end == NULL)
+  {
+    remove(path);
+    return;
+  }
+
   if (userAlbums = fopen(path, "wb"))
   {
     albums *current = end;
-    do
+
+    while (current != NULL)
     {
       fseek(userAlbums, 0, SEEK_END);
       fwrite(current, sizeof(albums), 1, userAlbums);
 
       printf("Zapisuję %s do pliku.\n", current->title);
       current = current->previous;
-    } while (current != NULL);
+    }
 
     fclose(userAlbums);
   }
