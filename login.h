@@ -13,12 +13,12 @@ bool getPassword(char username[]);
 bool checkPassword(char username[], char password[]);
 bool checkIfAccountExists(char username[]);
 char *login();
-bool makeAccount(char username[]);
+bool makeAccount(char *username);
 
-bool makeAccount(char username[])
+bool makeAccount(char *username)
 {
   FILE *userFile;
-  char path[100] = "./users/";
+  char path[100] = "users/";
   strcat(path, username);
   userFile = fopen(path, "w");
   if (userFile != NULL)
@@ -98,7 +98,7 @@ char *login()
 {
   char *username = malloc(sizeof(char) * 64);
   printf("❓ Podaj login: ");
-  fgets(username, 64, stdin);
+  scanf("%s%*c", username);
 
   if (checkIfAccountExists(username))
   {

@@ -27,10 +27,13 @@ int main()
 #endif
   char *username;
 
-  do
+  username = login();
+
+  if (username == NULL)
   {
-    username = login();
-  } while (username == NULL);
+    printf("Nie udało się zalogować.\n");
+    return 0;
+  }
 
   printf("Zalogowano na konto: %s\n", username);
 
