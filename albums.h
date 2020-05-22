@@ -34,6 +34,7 @@ albums *readFromFile(int *nextId, char *username);
 
 void find_album(albums *end, char title[]);
 void deleteAlbum(albums **end, int id, char *username);
+void change(albums *end, int id);
 
 void manageAlbums(char *username)
 {
@@ -46,7 +47,7 @@ void manageAlbums(char *username)
   do
   {
     printf("Co chcesz zrobić ze swoimi albumami?\n");
-    printf("\t[1] Dodać album\n\t[2] Wyświetlić listę albumów\n\t[3] Usunąć album\n\t[4] Szukanie albumu\n\t[0] Zakończyć program\n");
+    printf("\t[1] Dodać album\n\t[2] Wyświetlić listę albumów\n\t[3] Usunąć album\n\t[4] Szukanie albumu\n\t[5] Modyfikuj\n\t[0] Zakończyć program\n");
     printf("Wybór: ");
     scanf("%d", &choice);
     getchar();
@@ -72,6 +73,11 @@ void manageAlbums(char *username)
       scanf("%s", title);
       find_album(end, title);
       break;
+    case 5:
+      printf("Wpisz ID albumu ktory chcesz zmodyfikowac: ");
+      scanf("%d", &id);
+      change(end, id);
+      saveToFile(end, username);
     }
   } while (choice != 0);
 }
@@ -116,6 +122,55 @@ void getAlbum(albums **end, int *id)
     (*end)->next = newAlbum;
   }
   *end = newAlbum;
+}
+
+void change(albums *end, int id)
+{
+  int w;
+  do
+  {
+    if (end->id == id)
+    {
+      printf("Ktora dana chcesz zmodyfikowac: \n");
+      printf("\t[1] Artysta\n\t[2] Tytul\n\t[3] Gatunek\n\t[4] Data wydania\n\t[5] Zmien status zakupienia\n\t[6] Zmien stan odsluchania\n\t[0] Zakoncz modyfikacje\n");
+      printf("Wybor: ");
+      scanf("%d%*c", &w);
+      switch (w)
+      {
+      case 1:
+        printf("Zmien artyste: ");
+        fgets(end->artist, 128, stdin);
+        end->artist[strlen(end->artist) - 1] = '\0';
+        break;
+      case 2:
+        printf("Zmien tytul: ");
+        fgets(end->title, 64, stdin);
+        end->title[strlen(end->title) - 1] = '\0';
+        break;
+      case 3:
+        printf("Zmien gatunek: ");
+        fgets(end->genre, 128, stdin);
+        end->genre[strlen(end->genre) - 1] = '\0';
+        break;
+      case 4:
+        printf("Zmien date: ");
+        printf("\tRok: ");
+        scanf("%d", &end->date.year);
+        printf("\tMiesiac: ");
+        scanf("%d", &end->date.month);
+        printf("\tDzien: ");
+        scanf("%d%*c", &end->date.day);
+        break;
+      case 5:
+        end->bought = getBooleanInput("Czy zakupiono", false);
+        break;
+      case 6:
+        end->listened = getBooleanInput("Czy odsłuchano", false);
+        break;
+      }
+    }
+    end = end->previous;
+  } while (end != NULL);
 }
 
 void deleteAlbum(albums **end, int id, char *username)
