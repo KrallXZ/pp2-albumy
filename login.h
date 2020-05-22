@@ -18,7 +18,7 @@ bool makeAccount(char *username);
 bool makeAccount(char *username)
 {
   FILE *userFile;
-  char path[100] = "users/";
+  char path[100] = "./users/";
   strcat(path, username);
   userFile = fopen(path, "w");
   if (userFile != NULL)
