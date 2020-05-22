@@ -13,9 +13,9 @@ bool getPassword(char username[]);
 bool checkPassword(char username[], char password[]);
 bool checkIfAccountExists(char username[]);
 char *login();
-void makeAccount(char username[]);
+bool makeAccount(char username[]);
 
-void makeAccount(char username[])
+bool makeAccount(char username[])
 {
   FILE *userFile;
   char path[100] = "./users/";
@@ -28,7 +28,11 @@ void makeAccount(char username[])
     fgets(password, 64, stdin);
     fputs(password, userFile);
     fclose(userFile);
+
+    return true;
   }
+
+  return false;
 }
 
 bool getPassword(char username[])
@@ -113,8 +117,12 @@ char *login()
     if (createNewAccount)
     {
       printf("Trwa tworzenie konta... 😉\n");
-      makeAccount(username);
-      return username;
+      if (makeAccount(username))
+      {
+        return username;
+      }
+
+      printf("Nie udało się utworzyć konta.\n");
     }
   }
 
