@@ -25,16 +25,16 @@ int main()
 #ifdef _WIN32
   system("chcp 65001");
 #endif
-  bool isLogged;
+  char *username;
 
   do
   {
-    isLogged = login();
-  } while (!isLogged);
+    username = login();
+  } while (username == NULL);
 
-  printf("Zalogowano na konto: %s\n", _username);
+  printf("Zalogowano na konto: %s\n", username);
 
-  manageAlbums();
+  manageAlbums(username);
 
   return 0;
 }

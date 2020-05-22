@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "utils.h"
 
 #define MAX_ATTEMPTS 3
 
-char _username[64];
+// char _username[64];
 
 bool getPassword(char username[]);
 bool checkPassword(char username[], char password[]);
 bool checkIfAccountExists(char username[]);
-bool login();
+char *login();
 void makeAccount(char username[]);
 
 void makeAccount(char username[])
@@ -24,7 +25,7 @@ void makeAccount(char username[])
   {
     char password[64];
     printf("Podaj swoje nowe hasło: ");
-    scanf("%s", password);
+    fgets(password, 64, stdin);
     fputs(password, userFile);
     fclose(userFile);
   }
@@ -38,7 +39,7 @@ bool getPassword(char username[])
   while (attempt <= 3)
   {
     printf("[%d/%d] ❓ Podaj hasło: ", attempt, MAX_ATTEMPTS);
-    scanf("%s", password);
+    fgets(password, 64, stdin);
 
     if (checkPassword(username, password))
     {
@@ -62,7 +63,7 @@ bool checkPassword(char username[], char password[])
   if (userFile = fopen(path, "r"))
   {
     char passwordFromFile[64];
-    fscanf(userFile, "%s", passwordFromFile);
+    fgets(passwordFromFile, 64, userFile);
     fclose(userFile);
 
     if (strcmp(password, passwordFromFile) == 0)
@@ -89,11 +90,11 @@ bool checkIfAccountExists(char username[])
   return false;
 }
 
-bool login()
+char *login()
 {
-  char username[64];
+  char *username = malloc(sizeof(char) * 64);
   printf("❓ Podaj login: ");
-  scanf("%s", username);
+  fgets(username, 64, stdin);
 
   if (checkIfAccountExists(username))
   {
@@ -101,8 +102,7 @@ bool login()
 
     if (success == true)
     {
-      strcpy(_username, username);
-      return true;
+      return username;
     }
   }
   else
@@ -114,12 +114,9 @@ bool login()
     {
       printf("Trwa tworzenie konta... 😉\n");
       makeAccount(username);
-      strcpy(_username, username);
-      return true;
+      return username;
     }
-
-    return false;
   }
 
-  return false;
+  return NULL;
 }

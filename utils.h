@@ -1,9 +1,21 @@
+#ifndef UTILS_H
+#define UTILS_H
+
 #include <stdio.h>
 #include <stdbool.h>
 
+void fixInput()
+{
+  char c = getchar();
+  while (c != '\n' && c != EOF)
+  {
+    c = getchar();
+  }
+}
+
 bool getBooleanInput(char question[], bool defaultChoice)
 {
-  getchar();
+  // fixInput();
   char input[128];
   while (true)
   {
@@ -27,3 +39,5 @@ bool getBooleanInput(char question[], bool defaultChoice)
     }
   };
 }
+
+#endif

@@ -2,6 +2,16 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdbool.h>
+
+#include "utils.h"
+
+typedef struct date
+{
+  int year;
+  int month;
+  int day;
+} Date;
 
 typedef struct album
 {
@@ -9,7 +19,7 @@ typedef struct album
   char artist[128];
   char title[64];
   char genre[128];
-  char released[32];
+  Date date;
   bool bought;
   bool listened;
   struct album *previous;
@@ -17,20 +27,25 @@ typedef struct album
 
 void getAlbum(albums **end, int *id);
 void showAlbums(albums *end);
-void manageAlbums();
-void saveToFile(albums *end);
-albums *readFromFile(int *nextId);
+void manageAlbums(char *username);
+void saveToFile(albums *end, char *username);
+albums *readFromFile(int *nextId, char *username);
 
-void manageAlbums()
+void find_album(albums *end, char title[]);
+void delete_album(albums **end, int id);
+
+void manageAlbums(char *username)
 {
-  int choice;
+  printf("Ładowanie albumów...\n");
+  int choice, numer;
+  char artist[128], title[64];
   int nextId = 1;
-  albums *end = readFromFile(&nextId);
+  albums *end = readFromFile(&nextId, username);
 
   do
   {
     printf("Co chcesz zrobić ze swoimi albumami?\n");
-    printf("\t[1] Dodać album\n\t[2] Wyświetlić listę albumów\n\t[0] Zakończyć program\n");
+    printf("\t[1] Dodać album\n\t[2] Wyświetlić listę albumów\n\t[3] Usunąć album\n\t[4] Szukanie albumu\n\t[0] Zakończyć program\n");
     printf("Wybór: ");
     scanf("%d", &choice);
     getchar();
@@ -39,10 +54,22 @@ void manageAlbums()
     {
     case 1:
       getAlbum(&end, &nextId);
-      saveToFile(end);
+      saveToFile(end, username);
       break;
     case 2:
       showAlbums(end);
+      break;
+    case 3:
+      printf("Podaj ID albumu ktory chcesz usunac: ");
+      scanf("%d", &numer);
+      delete_album(&end, numer);
+      saveToFile(end, username);
+      break;
+    case 4:
+      printf("Podaj dane albumu\n");
+      printf("Tytuł: ");
+      scanf("%s", title);
+      find_album(end, title);
       break;
     }
   } while (choice != 0);
@@ -67,32 +94,91 @@ void getAlbum(albums **end, int *id)
   fgets(newAlbum->genre, 128, stdin);
   newAlbum->genre[strlen(newAlbum->genre) - 1] = '\0';
 
-  printf("\tWydano: ");
-  fgets(newAlbum->released, 32, stdin);
-  newAlbum->released[strlen(newAlbum->released) - 1] = '\0';
+  printf("\tRok: ");
+  scanf("%d", &newAlbum->date.year);
 
-  char bought;
-  do
-  {
-    printf("\tCzy zakupiono (T/N): ");
-    scanf("%c", &bought);
-    getchar();
-  } while (bought != 'T' && bought != 'N');
-  newAlbum->bought = bought == 'T' ? true : false;
+  printf("\tMiesiac: ");
+  scanf("%d", &newAlbum->date.month);
 
-  char listened;
-  do
-  {
-    printf("\tCzy odsłuchano (T/N): ");
-    scanf("%c", &listened);
-    getchar();
-  } while (listened != 'T' && listened != 'N');
-  newAlbum->listened = listened == 'T' ? true : false;
+  printf("\tDzien: ");
+  scanf("%d%*c", &newAlbum->date.day);
+
+  newAlbum->bought = getBooleanInput("Czy zakupiono", false);
+  newAlbum->listened = getBooleanInput("Czy odsłuchano", false);
 
   *id += 1;
 
   newAlbum->previous = (*end);
   *end = newAlbum;
+}
+
+void delete_front(albums **end)
+{
+  albums *prev = (*end)->previous;
+  free(*end);
+  *end = prev;
+}
+
+albums *find_prev_node(albums *end, int id)
+{
+  albums *prev = NULL;
+  while ((NULL != end) && (end->id != id))
+  {
+    prev = end;
+    end = end->previous;
+  }
+  return prev;
+}
+
+void delete_after(albums *node)
+{
+  albums *prev = node->previous;
+  if (prev)
+  {
+    node->previous = prev->previous;
+    free(prev);
+  }
+}
+
+void delete_album(albums **end, int id)
+{
+  if (NULL == *end)
+  {
+    printf("Lista jest pusta");
+    return;
+  }
+  if ((*end)->id == id)
+  {
+    return delete_front(end);
+  }
+  else
+  {
+    albums *prev = find_prev_node(*end, id);
+    delete_after(prev);
+  }
+}
+
+void find_album(albums *end, char title[])
+{
+  if (end == NULL)
+  {
+    printf("Lista jest pusta.\n");
+    return;
+  }
+  do
+  {
+    if (strcmp(title, end->title) == 0)
+    {
+      printf("Album nr %d:\n", end->id);
+      printf("\tArtysta: %s\n", end->artist);
+      printf("\tTytul: %s\n", end->title);
+      printf("\tRok wydania: %d.%d.%d\n", end->date.day, end->date.month, end->date.year);
+      printf("\tGatunek: %s\n", end->genre);
+      printf("\tZakupiono: %s\n", end->bought ? "TAK" : "NIE");
+      printf("\tOdsłuchano: %s\n", end->listened ? "TAK" : "NIE");
+    }
+    end = end->previous;
+  } while (end != NULL);
 }
 
 void showAlbums(albums *end)
@@ -109,7 +195,7 @@ void showAlbums(albums *end)
     printf("Album nr %d:\n", album->id);
     printf("\tArtysta: %s\n", album->artist);
     printf("\tTytul: %s\n", album->title);
-    printf("\tWydano: %s\n", album->released);
+    printf("\tRok wydania: %d.%d.%d\n", album->date.day, album->date.month, album->date.year);
     printf("\tGatunek: %s\n", album->genre);
     printf("\tZakupiono: %s\n", album->bought ? "TAK" : "NIE");
     printf("\tOdsłuchano: %s\n", album->listened ? "TAK" : "NIE");
@@ -117,12 +203,12 @@ void showAlbums(albums *end)
   } while (album != NULL);
 }
 
-void saveToFile(albums *end)
+void saveToFile(albums *end, char *username)
 {
   FILE *userAlbums;
 
   char path[100] = "./albums/";
-  strcat(path, _username);
+  strcat(path, username);
 
   if (userAlbums = fopen(path, "wb"))
   {
@@ -132,7 +218,7 @@ void saveToFile(albums *end)
       fseek(userAlbums, 0, SEEK_END);
       fwrite(current, sizeof(albums), 1, userAlbums);
 
-      //printf("Zapisuję %s do pliku.\n", current->title);
+      printf("Zapisuję %s do pliku.\n", current->title);
       current = current->previous;
     } while (current != NULL);
 
@@ -140,12 +226,12 @@ void saveToFile(albums *end)
   }
 }
 
-albums *readFromFile(int *nextId)
+albums *readFromFile(int *nextId, char *username)
 {
   FILE *userAlbums;
 
   char path[100] = "./albums/";
-  strcat(path, _username);
+  strcat(path, username);
 
   if (userAlbums = fopen(path, "rb"))
   {
