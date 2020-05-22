@@ -246,6 +246,12 @@ albums *readFromFile(int *nextId, char *username)
 
       fread(temp, sizeof(albums), 1, userAlbums);
       temp->previous = (i == 0) ? NULL : end;
+      temp->next = NULL;
+
+      if (i != 0)
+      {
+        end->next = temp;
+      }
 
       end = temp;
     }
