@@ -11,8 +11,8 @@ void manageAlbums(char *username)
   do
   {
     printf("Co chcesz zrobić ze swoimi albumami?\n");
-    printf("\t[1] Dodać album\n\t[2] Wyświetlić listę albumów\n\t[3] Usunąć album\n\t[4] Szukanie albumu\n\t[5] Modyfikuj\n\t[0] Zakończyć program\n");
-    choice = getNumberInput("Wybór: ", 1, 0, 5);
+    printf("\t[1] Dodać album\n\t[2] Wyświetlić listę albumów\n\t[3] Usunąć album\n\t[4] Szukanie albumu\n\t[5] Modyfikuj\n\t[6] Eksport do CSV\n\t[0] Zakończyć program\n");
+    choice = getNumberInput("Wybór: ", 1, 0, 6);
     getchar();
 
     switch (choice)
@@ -42,6 +42,9 @@ void manageAlbums(char *username)
       scanf("%d", &id);
       changeAlbum(end, id);
       saveToFile(end, username);
+      break;
+    case 6:
+      exportToCSV(end, username);
       break;
     }
   } while (choice != 0);

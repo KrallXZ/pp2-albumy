@@ -23,7 +23,7 @@ void saveToFile(albums *end, char *username)
       fseek(userAlbums, 0, SEEK_END);
       fwrite(current, sizeof(albums), 1, userAlbums);
 
-      printf("Zapisuję %s do pliku.\n", current->title);
+      // printf("Zapisuję %s do pliku.\n", current->title);
       current = current->previous;
     }
 
@@ -67,5 +67,33 @@ albums *readFromFile(int *nextId, char *username)
     *nextId = numberOfElements + 1;
 
     return end;
+  }
+}
+
+void exportToCSV(albums *end, char *username)
+{
+  FILE *userAlbums;
+
+  char path[100] = "./albums/";
+  strcat(path, username);
+  strcat(path, ".csv");
+
+  if (userAlbums = fopen(path, "w"))
+  {
+    albums *current = end;
+
+    fprintf(userAlbums, "\"ID\";\"Nazwa\";\"Artysci\";\"Data\";\"Gatunek\";\"Kupiony\";\"Przesluchany\"\n");
+
+    while (current != NULL)
+    {
+      fprintf(userAlbums, "%d;\"%s\";\"%s\";\"%d.%d.%d\";\"%s\";\"%s\";\"%s\"\n", current->id, current->title, current->artist, current->date.day, current->date.month, current->date.year, current->genre, current->bought ? "TAK" : "NIE", current->listened ? "TAK" : "NIE");
+
+      // printf("Zapisuję %s do pliku.\n", current->title);
+      current = current->previous;
+    }
+
+    fclose(userAlbums);
+
+    printf("Zapisano do pliku %s\n", path);
   }
 }
