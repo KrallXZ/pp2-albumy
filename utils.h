@@ -4,18 +4,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void fixInput()
-{
-  char c = getchar();
-  while (c != '\n' && c != EOF)
-  {
-    c = getchar();
-  }
-}
-
 bool getBooleanInput(char question[], bool defaultChoice)
 {
-  // fixInput();
   char input[128];
   while (true)
   {
