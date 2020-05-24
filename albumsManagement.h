@@ -21,14 +21,11 @@ void getAlbum(albums **end, int *id)
   fgets(newAlbum->genre, 128, stdin);
   newAlbum->genre[strlen(newAlbum->genre) - 1] = '\0';
 
-  printf("\tRok: ");
-  scanf("%d", &newAlbum->date.year);
+  newAlbum->date.year = getNumberInput("\tRok (YYYY): ", 4, 0, 2020);
+  newAlbum->date.month = getNumberInput("\tMiesiąc (MM): ", 2, 1, 12);
+  newAlbum->date.day = getNumberInput("\tDzień (DD): ", 2, 1, 31);
 
-  printf("\tMiesiac: ");
-  scanf("%d", &newAlbum->date.month);
-
-  printf("\tDzien: ");
-  scanf("%d%*c", &newAlbum->date.day);
+  getchar();
 
   newAlbum->bought = getBooleanInput("Czy zakupiono", false);
   newAlbum->listened = getBooleanInput("Czy odsłuchano", false);
