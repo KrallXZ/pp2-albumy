@@ -59,12 +59,15 @@ albums *readFromFile(int *nextId, char *username)
         end->next = temp;
       }
 
+      if (temp->id >= *nextId)
+      {
+        *nextId = temp->id + 1;
+      }
+
       end = temp;
     }
 
     fclose(userAlbums);
-
-    *nextId = numberOfElements + 1;
 
     return end;
   }
