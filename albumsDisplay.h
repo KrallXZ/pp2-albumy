@@ -1,16 +1,32 @@
-void findAlbum(albums *end, char title[]);
+void findAlbum(albums *end, char search[]);
 void showAlbums(albums *end);
 
-void findAlbum(albums *end, char title[])
+void findAlbum(albums *end, char search[])
 {
   if (end == NULL)
   {
     printf("Lista jest pusta.\n");
     return;
   }
+  char temp[128];
+  char temp1[128];
   do
   {
-    if (strcmp(title, end->title) == 0)
+    strcpy(temp, end->title);
+    strcpy(temp1, end->artist);
+    for (int i = 0; i < strlen(temp); i++)
+    {
+      temp[i] = tolower(temp[i]);
+    }
+    for (int i = 0; i < strlen(temp1); i++)
+    {
+      temp1[i] = tolower(temp1[i]);
+    }
+    for (int i = 0; i < strlen(search); i++)
+    {
+      search[i] = tolower(search[i]);
+    }
+    if (strstr(temp, search) != NULL || strstr(temp1, search) != NULL)
     {
       printf("Album nr %d:\n", end->id);
       printf("\tArtysta: %s\n", end->artist);

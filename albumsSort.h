@@ -36,7 +36,7 @@ void swap(albums *a, albums *b)
 
 void sort(albums **end)
 {
-  if (end == NULL)
+  if (*end == NULL)
   {
     return;
   }

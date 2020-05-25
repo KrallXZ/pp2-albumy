@@ -4,7 +4,7 @@ void manageAlbums(char *username)
 {
   printf("Ładowanie albumów...\n");
   int choice, id, i;
-  char artist[128], title[64];
+  char search[128];
   int nextId = 1;
   albums *end = readFromFile(&nextId, username);
 
@@ -27,15 +27,15 @@ void manageAlbums(char *username)
       break;
     case 3:
       printf("Podaj ID albumu ktory chcesz usunac: ");
-      scanf("%d", &id);
+      scanf("%d%*c", &id);
       deleteAlbum(&end, id, username);
       saveToFile(end, username);
       break;
     case 4:
-      printf("Podaj dane albumu\n");
-      printf("Tytuł: ");
-      scanf("%s", title);
-      findAlbum(end, title);
+      printf("Wpisz tytul lub artyste: ");
+      fgets(search, 128, stdin);
+      search[strlen(search) - 1] = '\0';
+      findAlbum(end, search);
       break;
     case 5:
       printf("Wpisz ID albumu ktory chcesz zmodyfikowac: ");
