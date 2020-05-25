@@ -69,23 +69,23 @@ void sort(albums **end)
       }
       else if (choice == 4)
       {
-        if (first->date.year >= second->date.year)
+        if (first->date.year > second->date.year)
         {
-          if (first->date.month >= second->date.month)
+          shouldSwap = true;
+        }
+        else if (first->date.year == second->date.year)
+        {
+          if (first->date.month > second->date.month)
           {
-            if (first->date.day >= second->date.day)
+            shouldSwap = true;
+          }
+          else if (first->date.month == second->date.month)
+          {
+            if (first->date.day > second->date.day)
             {
               shouldSwap = true;
             }
           }
-          else
-          {
-            shouldSwap = false;
-          }
-        }
-        else
-        {
-          shouldSwap = false;
         }
       }
       else if (choice == 5)
