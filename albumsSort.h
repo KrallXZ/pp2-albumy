@@ -1,5 +1,5 @@
 void swap(albums *a, albums *b);
-void sort(albums **end);
+void sort(albums *end);
 
 void swap(albums *a, albums *b)
 {
@@ -34,9 +34,9 @@ void swap(albums *a, albums *b)
   b->listened = tempAlbum->listened;
 }
 
-void sort(albums **end)
+void sort(albums *end)
 {
-  if (*end == NULL)
+  if (end == NULL)
   {
     return;
   }
@@ -44,44 +44,39 @@ void sort(albums **end)
   printf("Posortowane według:\n\t[1] Artyści\n\t[2] Tytuły\n\t[3] Gatunki\n\t[4] Daty wydania\n\t[5] ID albumu\n");
   int choice = getNumberInput("Podaj jedną z opcji: ", 1, 1, 5);
 
-  bool shouldSwap = true;
-  albums *tempPointer = NULL;
-
-  while (shouldSwap)
+  for (albums *current = end; current->previous != NULL; current = current->previous)
   {
-    shouldSwap = false;
-    albums *first = *end;
-    albums *second = (*end)->previous;
-
-    while (second != tempPointer)
+    for (albums *previous = current->previous; previous != NULL; previous = previous->previous)
     {
+      bool shouldSwap = false;
+
       if (choice == 1)
       {
-        shouldSwap = (strcmp(first->artist, second->artist) > 0) ? true : false;
+        shouldSwap = (strcmp(current->artist, previous->artist) > 0) ? true : false;
       }
       else if (choice == 2)
       {
-        shouldSwap = (strcmp(first->title, second->title) > 0) ? true : false;
+        shouldSwap = (strcmp(current->title, previous->title) > 0) ? true : false;
       }
       else if (choice == 3)
       {
-        shouldSwap = (strcmp(first->genre, second->genre) > 0) ? true : false;
+        shouldSwap = (strcmp(current->genre, previous->genre) > 0) ? true : false;
       }
       else if (choice == 4)
       {
-        if (first->date.year > second->date.year)
+        if (current->date.year > previous->date.year)
         {
           shouldSwap = true;
         }
-        else if (first->date.year == second->date.year)
+        else if (current->date.year == previous->date.year)
         {
-          if (first->date.month > second->date.month)
+          if (current->date.month > previous->date.month)
           {
             shouldSwap = true;
           }
-          else if (first->date.month == second->date.month)
+          else if (current->date.month == previous->date.month)
           {
-            if (first->date.day > second->date.day)
+            if (current->date.day > previous->date.day)
             {
               shouldSwap = true;
             }
@@ -90,17 +85,13 @@ void sort(albums **end)
       }
       else if (choice == 5)
       {
-        shouldSwap = first->id > second->id ? true : false;
+        shouldSwap = current->id > previous->id ? true : false;
       }
 
       if (shouldSwap)
       {
-        swap(first, second);
+        swap(current, previous);
       }
-
-      first = first->previous;
-      second = first->previous;
     }
-    tempPointer = first;
   }
 }

@@ -22,7 +22,7 @@ void manageAlbums(char *username)
       saveToFile(end, username);
       break;
     case 2:
-      sort(&end);
+      sort(end);
       showAlbums(end);
       break;
     case 3:
