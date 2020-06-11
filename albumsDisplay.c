@@ -1,5 +1,4 @@
-void findAlbum(albums *end, char search[]);
-void showAlbums(albums *end);
+#include "albums.h"
 
 void findAlbum(albums *end, char search[])
 {

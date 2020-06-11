@@ -1,4 +1,4 @@
-void manageAlbums(char *username);
+#include "albums.h"
 
 void manageAlbums(char *username)
 {

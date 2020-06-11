@@ -7,7 +7,12 @@
       "type": "shell",
       "label": "gcc build active file",
       "command": "/usr/bin/gcc",
-      "args": ["-g", "${fileDirname}/main.c", "-o", "${fileDirname}/main"],
+      "args": [
+        "-g",
+        "${workspaceFolder}/*.c",
+        "-o",
+        "${workspaceFolder}/album-manager"
+      ],
       "options": {
         "cwd": "/usr/bin"
       },

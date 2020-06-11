@@ -1,5 +1,4 @@
-void saveToFile(albums *end, char *username);
-albums *readFromFile(int *nextId, char *username);
+#include "albums.h"
 
 void saveToFile(albums *end, char *username)
 {

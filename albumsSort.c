@@ -1,5 +1,4 @@
-void swap(albums *a, albums *b);
-void sort(albums *end);
+#include "albums.h"
 
 void swap(albums *a, albums *b)
 {

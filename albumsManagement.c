@@ -1,6 +1,4 @@
-void getAlbum(albums **end, int *id);
-void changeAlbum(albums *end, int id);
-void deleteAlbum(albums **end, int id, char *username);
+#include "albums.h"
 
 void getAlbum(albums **end, int *id)
 {

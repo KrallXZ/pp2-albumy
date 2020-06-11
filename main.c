@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdbool.h>
 
 #ifndef _WIN32
 #include <sys/stat.h>
