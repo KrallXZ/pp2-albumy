@@ -1,5 +1,11 @@
 #include "utils.h"
-
+/** @em getNumberInput Funkcja sluzaca do walidacji danych.
+*
+*@param char question[] - parametr okreslajacy etykiete wejscia
+*@param int maxLength - parametr okreslajacy maksymalna dlugosc wprowadzonych danych.
+*@param int minValue - parametr okreslajacy minimalna wartosc danych.
+*@param int maxValue - parametr okreslajac maksymalna wartosc danych.
+*/
 int getNumberInput(char question[], int maxLength, int minValue, int maxValue)
 {
     char *input = malloc(maxLength * sizeof(char));
@@ -28,7 +34,11 @@ int getNumberInput(char question[], int maxLength, int minValue, int maxValue)
         done = false;
     }
 }
-
+/** @em getBooleanInput Funkcja sluzaca do obslugi domyslnych odpowiedzi
+*
+*@param char question[] - parametr okreslajacy etykiete wejscia.
+*@param bool defaultChoice - parametr okreslajacy domyslna odpowiedz.
+*/
 bool getBooleanInput(char question[], bool defaultChoice)
 {
     char input[128];

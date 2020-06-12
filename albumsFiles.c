@@ -1,5 +1,9 @@
 #include "albums.h"
-
+/** @em saveToFile Funkcja sluzy do zapisywania albumow do pliku.
+*
+*@param albums *end - przekazywana jest lista wszystkich albumow aktualnie zalogowanego uzytkownika.
+*@param char *username - parametr okreslający nazwę aktualnie zalogowanego użytkownika.
+*/
 void saveToFile(albums *end, char *username)
 {
   FILE *userAlbums;
@@ -22,14 +26,17 @@ void saveToFile(albums *end, char *username)
       fseek(userAlbums, 0, SEEK_END);
       fwrite(current, sizeof(albums), 1, userAlbums);
 
-      // printf("Zapisuję %s do pliku.\n", current->title);
       current = current->previous;
     }
 
     fclose(userAlbums);
   }
 }
-
+/** @em readFromFile Funkcja sluzy do odczytywania albumow uzytkownika z pliku.
+*
+*@param int *nextId - parametr zapisujący wartosc id albumu, ktory bedzie dodany jako nastepny.
+*@param char *username - parametr okreslający nazwe aktualnie zalogowanego uzytkownika.
+*/
 albums *readFromFile(int *nextId, char *username)
 {
   FILE *userAlbums;
@@ -71,7 +78,11 @@ albums *readFromFile(int *nextId, char *username)
     return end;
   }
 }
-
+/** @em exportToCSV Funkcja sluzy do zapisu albumow do pliku o rozszerzeniu .CSV
+*
+*@param albums *end - przekazywana jest lista wszystkich albumow.
+*@param char *username - parametr okreslający nazwe aktualnie zalogowanego uzytkownika.
+*/
 void exportToCSV(albums *end, char *username)
 {
   FILE *userAlbums;
@@ -90,7 +101,6 @@ void exportToCSV(albums *end, char *username)
     {
       fprintf(userAlbums, "%d;\"%s\";\"%s\";\"%d.%d.%d\";\"%s\";\"%s\";\"%s\"\n", current->id, current->title, current->artist, current->date.day, current->date.month, current->date.year, current->genre, current->bought ? "TAK" : "NIE", current->listened ? "TAK" : "NIE");
 
-      // printf("Zapisuję %s do pliku.\n", current->title);
       current = current->previous;
     }
 

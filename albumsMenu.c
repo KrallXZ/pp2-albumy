@@ -1,9 +1,12 @@
 #include "albums.h"
-
+/** @em manageAlbum Funkcja zarządzająca lista albumow uzytkownika.
+*
+*@param char *username - parametr okreśslajacy nazwe aktualnie zalogowanego uzytkownika.
+*/
 void manageAlbums(char *username)
 {
   printf("Ładowanie albumów...\n");
-  int choice, id, i;
+  int choice, id, i, w;
   char search[128];
   int nextId = 1;
   albums *end = readFromFile(&nextId, username);
@@ -22,7 +25,9 @@ void manageAlbums(char *username)
       saveToFile(end, username);
       break;
     case 2:
-      sort(end);
+      printf("Wybierz sposób wyświetlania\n\t[1] Rosnąco\n\t[2] Malejąco\n");
+      w = getNumberInput("Wybór: ", 1, 1, 2);
+      sort(end, w);
       showAlbums(end);
       break;
     case 3:

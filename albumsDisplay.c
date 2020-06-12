@@ -1,5 +1,9 @@
 #include "albums.h"
-
+/** @em findAlbum Funkcja słuzy do przeszukiwania listy albumow po tytule lub artyscie.
+*
+*@param albums *end - przekazywana jest lista wszystkich albumow aktualnie zalogowanego uzytkownika.
+*@param char search[] - przekazana wartosc tytulu lub artysty w celu przeszukania listy.
+*/
 void findAlbum(albums *end, char search[])
 {
   if (end == NULL)
@@ -38,7 +42,10 @@ void findAlbum(albums *end, char search[])
     end = end->previous;
   } while (end != NULL);
 }
-
+/** @em showAlbums - funkcja wyswietlajaca liste albumow akualnie zalogowanego uzytkownika.
+*
+*@param albums *end - przekazywana jest lista wszystkich albumow.
+*/
 void showAlbums(albums *end)
 {
   if (end == NULL)

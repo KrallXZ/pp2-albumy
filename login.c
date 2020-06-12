@@ -1,5 +1,8 @@
 #include "login.h"
-
+/** @em makeAccount Funkcja tworzaca nowego uzytkownika.
+*
+*@param char *username - parametr zawierający nazwe uzytkownika.
+*/
 bool makeAccount(char *username)
 {
     FILE *userFile;
@@ -19,7 +22,10 @@ bool makeAccount(char *username)
 
     return false;
 }
-
+/** @em getPassword Funkcja słuzaca do wpisania hasla.
+*
+*@param char username[] - parametr pobierający nazwe uzytkownika, do ktorego aktualnie chcemy się zalogowac.
+*/
 bool getPassword(char username[])
 {
     int attempt = 1;
@@ -42,7 +48,11 @@ bool getPassword(char username[])
     printf("Przekroczono ilość prób!\n\n");
     return false;
 }
-
+/** @em checkPassword Funkcja słuzy do sprawdzenia poprawnosci hasla.
+*
+*@param char username[] - parametr pobierajacy nazwe uzytkownika, do ktorego aktualnie chcemy się zalogowac.
+*@param char password[] - wpisane haslo, ktorego sprawdzamy popranosc.
+*/
 bool checkPassword(char username[], char password[])
 {
     FILE *userFile;
@@ -63,7 +73,9 @@ bool checkPassword(char username[], char password[])
 
     return false;
 }
-
+/** @em checkIfAccountExists Funkcja sprawdzajaca, czy uzytkownik o podanej nazwie istnieje.
+*@param char username[] - nazwa uzytkownika, ktorego istnienie jest sprawdzane.
+*/
 bool checkIfAccountExists(char username[])
 {
     FILE *userFile;
@@ -78,7 +90,9 @@ bool checkIfAccountExists(char username[])
 
     return false;
 }
-
+/** @em login Funkcja sluzaca do logowania i rejestracji uzytkownikow.
+*
+*/
 char *login()
 {
     char *username = malloc(sizeof(char) * 64);

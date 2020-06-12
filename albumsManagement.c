@@ -1,5 +1,9 @@
 #include "albums.h"
-
+/** @em getAlbum Funkcja dodajaca nowy album dla uzytkownika.
+*
+*@param albums **end - przekazywana jest lista wszystkich albumow.
+*@param int *id - numer id aktualnie tworzonego albumu.
+*/
 void getAlbum(albums **end, int *id)
 {
   albums *newAlbum = (albums *)malloc(sizeof(albums));
@@ -38,7 +42,11 @@ void getAlbum(albums **end, int *id)
   }
   *end = newAlbum;
 }
-
+/** @em changeAlbum Funkcja modyfikujaca wybrame pola albumu.
+*
+*@param albums *end - przekazywana jest lista wszystkich albumow.
+*@param int id - numer id albumu, ktory chcemy modifikowac.
+*/
 void changeAlbum(albums *end, int id)
 {
   int w;
@@ -99,7 +107,12 @@ void changeAlbum(albums *end, int id)
     printf("Nie znaleziono albumu");
   }
 }
-
+/** @em deleteAlbum Funkcja usuwajaca wybrany album uzytkownika.
+*
+*@param albums **end - przekazywana jest lista wszystkich albumow.
+*@param int id - numer id albumu, ktory chcemy usunąć.
+*@param char *username - parametr okreslajacy nazwe aktualnie zalogowanego uzytkownika.
+*/
 void deleteAlbum(albums **end, int id, char *username)
 {
 
